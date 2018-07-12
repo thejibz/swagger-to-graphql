@@ -1,4 +1,5 @@
 // @flow
+const debug = require('debug')('swagger-to-graphql')
 import type {GraphQLParameters, Endpoint, GraphQLType, RootGraphQLSchema, SwaggerToGraphQLOptions, GraphQLTypeMap} from './types';
 import rp from 'request-promise';
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
@@ -41,7 +42,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
       const { host, ...otherHeaders } = opts.headers;
       req.headers = Object.assign(customHeaders, req.headers, otherHeaders);
     }
-    console.log("[swagger-to-graphql] " + req);
+    debug("[swagger-to-graphql] %O", req);
     const res = await rp(req);
     return JSON.parse(res);
   };
