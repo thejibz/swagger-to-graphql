@@ -1,10 +1,11 @@
 // @flow
-const debug = require('debug')('swagger-to-graphql')
 import type {GraphQLParameters, Endpoint, GraphQLType, RootGraphQLSchema, SwaggerToGraphQLOptions, GraphQLTypeMap} from './types';
 import rp from 'request-promise';
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { getAllEndPoints, loadSchema, loadRefs } from './swagger';
 import { createGQLObject, mapParametersToFields } from './typeMap';
+
+let logger;
 
 type Endpoints = {[string]: Endpoint};
 
@@ -42,7 +43,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
       const { host, ...otherHeaders } = opts.headers;
       req.headers = Object.assign(customHeaders, req.headers, otherHeaders);
     }
-    debug("[swagger-to-graphql] %O", req);
+    logger.info("[swagger-to-graphql] " + req);
     const res = await rp(req);
     return JSON.parse(res);
   };
@@ -64,7 +65,8 @@ const getFields = (endpoints, isMutation, gqlTypes, proxyUrl, headers): GraphQLT
   }, {});
 };
 
-const build = async (swaggerPath: string, proxyUrl: ?(Function | string) = null, headers: ?{[string]: string}) => {
+const build = async (logger: object, swaggerPath: string, proxyUrl: ?(Function | string) = null, headers: ?{[string]: string}) => {
+  logger = logger;
   const swaggerSchema = await loadSchema(swaggerPath);
   const refs = await loadRefs(swaggerPath);
   const endpoints = getAllEndPoints(swaggerSchema, refs);
