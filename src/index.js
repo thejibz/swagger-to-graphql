@@ -5,8 +5,6 @@ import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { getAllEndPoints, loadSchema, loadRefs } from './swagger';
 import { createGQLObject, mapParametersToFields } from './typeMap';
 
-let logger;
-
 type Endpoints = {[string]: Endpoint};
 
 const schemaFromEndpoints = (endpoints: Endpoints, proxyUrl, headers) => {
@@ -65,8 +63,7 @@ const getFields = (endpoints, isMutation, gqlTypes, proxyUrl, headers): GraphQLT
   }, {});
 };
 
-const build = async (logger: object, swaggerPath: string, proxyUrl: ?(Function | string) = null, headers: ?{[string]: string}) => {
-  logger = logger;
+const build = async (swaggerPath: string, proxyUrl: ?(Function | string) = null, headers: ?{[string]: string}) => {
   const swaggerSchema = await loadSchema(swaggerPath);
   const refs = await loadRefs(swaggerPath);
   const endpoints = getAllEndPoints(swaggerSchema, refs);
