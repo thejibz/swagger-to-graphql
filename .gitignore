@@ -4,6 +4,10 @@
 .idea/
 .vscode/
 
+lib/
+package-lock.json
+bin/
+
 lib-cov
 *.seed
 *.log
