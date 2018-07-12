@@ -17,7 +17,7 @@
     "request-promise": "^4.1.1",
     "yargs": "^8.0.2",
     "debug": "~3.1.0",
-    "graphql": "^0.12"
+    "graphql": "^0.13.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -40,7 +40,7 @@
     "supertest": "^3.1.0"
   },
    "resolutions": {
-    "graphql": "0.13.2"
+    "graphql": "^0.13.0"
   },
   "keywords": [
     "graphql",
