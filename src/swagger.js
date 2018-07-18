@@ -75,6 +75,7 @@ const getParamDetails = (param, schema, refResolver) => {
 
 const renameGraphqlParametersToSwaggerParameters = (graphqlParameters, parameterDetails) => {
   const result = {};
+  console.log(JSON.stringify(parameterDetails, null, 2));
   Object.keys(graphqlParameters).forEach(inputGraphqlName => {
     const { jsonSchema: { name: swaggerName } } = parameterDetails.find(
       ({ name: graphqlName }) => graphqlName === inputGraphqlName
