@@ -95,7 +95,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
     Object.keys(route).forEach(method => {
       const obj = route[method];
       const isMutation = ['post', 'put', 'patch', 'delete'].indexOf(method) !== -1;
-      const typeName = obj.operationId || getGQLTypeNameFromURL(method, path);
+      const typeName = getGQLTypeNameFromURL(method, path) || obj.operationId;
       const parameterDetails = obj.parameters ? obj.parameters.map(param => getParamDetails(param, schema, refs)) : [];
       const endpoint: Endpoint = {
         parameters: parameterDetails,
