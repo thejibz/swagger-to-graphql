@@ -75,7 +75,6 @@ const getParamDetails = (param, schema, refResolver) => {
 
 const renameGraphqlParametersToSwaggerParameters = (graphqlParameters, parameterDetails) => {
   const result = {};
-  console.log("plop" + JSON.stringify(parameterDetails, null, 2));
   Object.keys(graphqlParameters).forEach(inputGraphqlName => {
     const { jsonSchema: { name: swaggerName } } = parameterDetails.find(
       ({ name: graphqlName }) => graphqlName === inputGraphqlName
@@ -97,6 +96,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       const obj = route[method];
       const isMutation = ['post', 'put', 'patch', 'delete'].indexOf(method) !== -1;
       const typeName = getGQLTypeNameFromURL(method, path) || obj.operationId;
+      console.log("plop" + JSON.stringify(obj.parameters, null, 2));
       const parameterDetails = obj.parameters ? obj.parameters.map(param => getParamDetails(param, schema, refs)) : [];
       const endpoint: Endpoint = {
         parameters: parameterDetails,
