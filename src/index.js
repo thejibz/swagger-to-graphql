@@ -39,32 +39,29 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
   async (_, args: GraphQLParameters, opts: SwaggerToGraphQLOptions) => {
     const proxy = !proxyUrl ? opts.GQLProxyBaseUrl : (typeof proxyUrl === 'function' ? proxyUrl(opts) : proxyUrl);
     const req = endpoint.request(args, proxy);
+    
     if (opts !== undefined && opts.headers) {
       const { host, ...otherHeaders } = opts.headers;
       req.headers = Object.assign(req.headers, otherHeaders);
     }
-    if (customHeaders) { // Fix to take into account customHeaders
-      const oauth = OAuth({
-        consumer: {
-          key: 'I7pHBAZ9VqQwd9EtxWU4ZtmW2',
-          secret: '8NV9fp27qDZhNmSBiGAmM5veebwW4BbFsCBrMLGFUi57W15OgK'
-        },
-        signature_method: 'HMAC-SHA1',
-        hash_function(base_string, key) {
-          return crypto.createHmac('sha1', key).update(base_string).digest('base64');
-        }
-      });
-      req.url += "?q=lyon&result_type=popular";
-      const request_data = {
-        url: req.url,
-        method: 'GET'
-      };
-      //req.headers = Object.assign(customHeaders, req.headers);
-      req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_data)), req.headers);
+    
+    if (customHeaders) { // [FIX] to take into account customHeaders
+      if (customHeaders.['x-oauth-v1']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
+        const oauth = OAuth(customHeaders.['x-oauth-v1']);
+        req.url += "?q=lyon&result_type=popular"; // [WIP]
+        const request_data = {
+          url: req.url,
+          method: 'GET'
+        };
+        
+        const { 'x-oauth-v1', ...otherHeaders } = opts.headers;
+        req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_data)), req.headers, otherHeaders);
+      } else {
+        req.headers = Object.assign(customHeaders, req.headers);  
+      }  
     }
     console.log("[swagger-to-graphql][req] " + JSON.stringify(req, null, 2));
     const res = await rp(req);
-    console.log("[swagger-to-graphql][res] " + JSON.stringify(JSON.parse(res), null, 2));
     return JSON.parse(res);
   };
 
