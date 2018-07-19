@@ -4,6 +4,8 @@ import rp from 'request-promise';
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { getAllEndPoints, loadSchema, loadRefs } from './swagger';
 import { createGQLObject, mapParametersToFields } from './typeMap';
+const OAuth   = require('oauth-1.0a')
+const crypto  = require('crypto');
 
 type Endpoints = {[string]: Endpoint};
 
@@ -42,7 +44,22 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
       req.headers = Object.assign(req.headers, otherHeaders);
     }
     if (customHeaders) { // Fix to take into account customHeaders
-      req.headers = Object.assign(customHeaders, req.headers);
+      const oauth = OAuth({
+        consumer: {
+          key: 'I7pHBAZ9VqQwd9EtxWU4ZtmW2',
+          secret: '8NV9fp27qDZhNmSBiGAmM5veebwW4BbFsCBrMLGFUi57W15OgK'
+        },
+        signature_method: 'HMAC-SHA1',
+        hash_function(base_string, key) {
+          return crypto.createHmac('sha1', key).update(base_string).digest('base64');
+        }
+      });
+      const request_data = {
+        url: req.url,
+        method: 'GET'
+      };
+      //req.headers = Object.assign(customHeaders, req.headers);
+      req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_data)), req.headers);
     }
     console.log("[swagger-to-graphql][req] " + JSON.stringify(req, null, 2));
     const res = await rp(req);
