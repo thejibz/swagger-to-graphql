@@ -37,13 +37,14 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
   async (_, args: GraphQLParameters, opts: SwaggerToGraphQLOptions) => {
     const proxy = !proxyUrl ? opts.GQLProxyBaseUrl : (typeof proxyUrl === 'function' ? proxyUrl(opts) : proxyUrl);
     const req = endpoint.request(args, proxy);
-    console.log("[swagger-to-graphql][customHeaders] " + JSON.stringify(customHeaders, null, 2));
-    if (opts !== undefined && opts.headers || customHeaders) {
+    if (opts !== undefined && opts.headers) {
       const { host, ...otherHeaders } = opts.headers;
-      req.headers = Object.assign(customHeaders, req.headers, otherHeaders);
-      console.log("[swagger-to-graphql][req.headers] " + JSON.stringify(req.headers, null, 2));
+      req.headers = Object.assign(req.headers, otherHeaders);
     }
-    console.log("[swagger-to-graphql] " + JSON.stringify(req, null, 2));
+    if (customHeaders) { // Fix to take into account customHeaders
+      req.headers = Object.assign(customHeaders, req.headers);
+    }
+    console.log("[swagger-to-graphql][req] " + JSON.stringify(req, null, 2));
     const res = await rp(req);
     return JSON.parse(res);
   };
