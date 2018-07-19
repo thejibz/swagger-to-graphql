@@ -54,6 +54,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
           return crypto.createHmac('sha1', key).update(base_string).digest('base64');
         }
       });
+      req.url += "?q=lyon&result_type=popular";
       const request_data = {
         url: req.url,
         method: 'GET'
