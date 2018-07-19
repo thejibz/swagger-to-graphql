@@ -48,7 +48,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     if (customHeaders) { // [FIX] to take into account customHeaders
       if (customHeaders['x-oauth-v1']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
         console.log("[swagger-to-graphql]['x-oauth-v1'] " + JSON.stringify(customHeaders['x-oauth-v1'], null, 2));
-        const oauth = OAuth(customHeaders['x-oauth-v1']);
+        const oauth = OAuth(JSON.parse(customHeaders['x-oauth-v1']));
         
         // remove OAuth secret from headers
         customHeaders = Array.isArray(customHeaders) ? customHeaders.filter(item => item !== 'x-oauth-v1') : [];
