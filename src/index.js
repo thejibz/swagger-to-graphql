@@ -83,7 +83,6 @@ const getFields = (endpoints, isMutation, gqlTypes, proxyUrl, headers): GraphQLT
       resolve: resolver(endpoint, proxyUrl, headers)
     };
     result[typeName] = gType;
-    console.log("[swagger-to-graphql][result] " + JSON.stringify(result, null, 2));
     return result;
   }, {});
 };
