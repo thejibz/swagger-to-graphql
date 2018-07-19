@@ -38,7 +38,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     const proxy = !proxyUrl ? opts.GQLProxyBaseUrl : (typeof proxyUrl === 'function' ? proxyUrl(opts) : proxyUrl);
     const req = endpoint.request(args, proxy);
     console.log("[swagger-to-graphql][customHeaders] " + JSON.stringify(customHeaders, null, 2));
-    if (opts !== undefined && opts.headers) {
+    if (opts !== undefined && opts.headers || customHeaders) {
       const { host, ...otherHeaders } = opts.headers;
       req.headers = Object.assign(customHeaders, req.headers, otherHeaders);
       console.log("[swagger-to-graphql][req.headers] " + JSON.stringify(req.headers, null, 2));
