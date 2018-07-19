@@ -47,18 +47,23 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     
     if (customHeaders) { // [FIX] to take into account customHeaders
       if (customHeaders['x-oauth-v1']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
+        
         const oauth = OAuth(customHeaders['x-oauth-v1']);
+        
+        // remove OAuth secret from headers
+        customHeaders = Array.isArray(customHeaders) ? customHeaders.filter(item => item !== 'x-oauth-v1') : [];
+        
         req.url += "?q=lyon&result_type=popular"; // [WIP]
         const request_data = {
           url: req.url,
           method: 'GET'
         };
         
-        const { 'x-oauth-v1', ...otherHeaders } = opts.headers;
-        req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_data)), req.headers, otherHeaders);
-      } else {
-        req.headers = Object.assign(customHeaders, req.headers);  
-      }  
+        // add OAuth headers       
+        req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_data)), req.headers);
+      }
+      // add customHeaders
+      req.headers = Object.assign(customHeaders, req.headers);  
     }
     console.log("[swagger-to-graphql][req] " + JSON.stringify(req, null, 2));
     const res = await rp(req);
