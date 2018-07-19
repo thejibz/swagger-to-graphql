@@ -56,6 +56,7 @@ export type SwaggerSchema = {
   paths: {
     [string]: {
       description?: string,
+      operationId?: string,
       parameters?: Array<Param>,
       responses: Responses
     }
