@@ -47,7 +47,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     
     if (customHeaders) { // [FIX] to take into account customHeaders
       if (customHeaders.['x-oauth-v1']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
-        const oauth = OAuth(customHeaders.['x-oauth-v1']);
+        const oauth = OAuth(customHeaders['x-oauth-v1']);
         req.url += "?q=lyon&result_type=popular"; // [WIP]
         const request_data = {
           url: req.url,
