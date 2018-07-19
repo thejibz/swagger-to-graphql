@@ -34,7 +34,7 @@ const schemaFromEndpoints = (endpoints: Endpoints, proxyUrl, headers) => {
 };
 
 const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHeaders = {}) =>
-  console.log("[swagger-to-graphql][headers] " + JSON.stringify(customHeaders, null, 2));
+  //console.log("[swagger-to-graphql][headers] " + JSON.stringify(customHeaders, null, 2));
   async (_, args: GraphQLParameters, opts: SwaggerToGraphQLOptions) => {
     const proxy = !proxyUrl ? opts.GQLProxyBaseUrl : (typeof proxyUrl === 'function' ? proxyUrl(opts) : proxyUrl);
     const req = endpoint.request(args, proxy);
