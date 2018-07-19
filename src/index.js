@@ -64,6 +64,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     }
     console.log("[swagger-to-graphql][req] " + JSON.stringify(req, null, 2));
     const res = await rp(req);
+    console.log("[swagger-to-graphql][res] " + JSON.stringify(res, null, 2));
     return JSON.parse(res);
   };
 
