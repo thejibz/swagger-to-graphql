@@ -58,7 +58,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
           url: req.url,
           method: 'GET'
         };
-        
+        console.log("[swagger-to-graphql][req before] " + JSON.stringify(req, null, 2));
         // add OAuth headers       
         req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_data)), req.headers);
       }
