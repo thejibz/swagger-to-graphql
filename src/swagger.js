@@ -104,7 +104,6 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       } else {
         parameterDetails = [];
       }
-      console.log("plop: " + JSON.stringify(parameterDetails, null, 2));
       const endpoint: Endpoint = {
         parameters: parameterDetails,
         description: obj.description,
