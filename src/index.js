@@ -46,25 +46,35 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     }
     
     if (customHeaders) { // [FIX] to take into account customHeaders
-      if (customHeaders['x-oauth-v1']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
-        console.log("[swagger-to-graphql]['x-oauth-v1'] " + JSON.stringify(customHeaders['x-oauth-v1'], null, 2));
-        const oauth = OAuth(JSON.parse(customHeaders['x-oauth-v1']));
-        
-        // remove OAuth secret from headers
-        customHeaders = Array.isArray(customHeaders) ? customHeaders.filter(item => item !== 'x-oauth-v1') : [];
-        
-        req.url += "?q=lyon&result_type=popular"; // [WIP]
-        const request_data = {
-          url: req.url,
-          method: 'GET'
+      if (customHeaders['x-oauth-v1-consumer-key']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
+
+        const oauth = OAuth({
+          consumer: {
+            key: customHeaders['x-oauth-v1-consumer-key'],
+            secret: customHeaders['x-oauth-v1-consumer-secret']
+          },
+          signature_method: customHeaders['x-oauth-v1-signature-method'],
+          hash_function(base_string, key) {
+            return crypto.createHmac('sha1', key).update(base_string).digest('base64');
+          }
+        });
+        const request_infos = {
+          url: customHeaders['x-oauth-v1-request-url'],
+          method: customHeaders['x-oauth-v1-request-method']
         };
         
+        // remove OAuth secret from headers
+        customHeaders = Array.isArray(customHeaders) ? customHeaders.filter(h => h !== 'x-oauth-v1-consumer-secret') : [];
+        
+        req.url += "?q=lyon&result_type=popular"; // [WIP]
+        
         // add OAuth headers       
-        req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_data)), req.headers);
+        req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_infos)), req.headers);
       }
       // add customHeaders
       req.headers = Object.assign(customHeaders, req.headers);  
     }
+    
     console.log("[swagger-to-graphql][req] " + JSON.stringify(req, null, 2));
     const res = await rp(req);
     return JSON.parse(res);
