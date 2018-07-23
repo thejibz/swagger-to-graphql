@@ -63,16 +63,14 @@ const getServerPath = (schema) => {
 };
 
 const getParamDetails = (param, schema, refResolver) => {
-  debug("[getParamDetails] %O", param)
   let _param = param;
   if (param.$ref) {
     _param = refResolver.get(param.$ref);
   }
-  debug("[getParamDetails] %O", param)
   const name = replaceOddChars(_param.name);
   const type = _param.type;
   const jsonSchema = _param;
-  debug("[getParamDetails] %O, %O, %O", name, type, jsonSchema)
+
   return {name, type, jsonSchema};
 };
 
@@ -107,6 +105,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       } else {
         parameterDetails = [];
       }
+      debug("[parameterDetails] %O", parameterDetails)
       const endpoint: Endpoint = {
         parameters: parameterDetails,
         description: obj.description,
@@ -117,17 +116,13 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
             throw new Error('Could not get the base url for endpoints. Check that either your schema has baseUrl or you provided it to constructor');
           }
           const url = `${baseUrl}${path}`;
-          debug("[graphqlParameters] %O", graphqlParameters)
-          debug("[parameterDetails] %O", parameterDetails)
           const request = renameGraphqlParametersToSwaggerParameters(graphqlParameters, parameterDetails);
-          debug("[request] %O", request)
           debug("[obj] %O", obj)
           const reqOpts = getRequestOptions(obj, {
             request,
             url,
             method: method
           }, '');
-          debug("[reqOpts] %O", reqOpts)
           return reqOpts
         },
         mutation: isMutation
