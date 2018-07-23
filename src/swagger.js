@@ -100,8 +100,8 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       let parameterDetails;
       
       // [FIX] for when parameters is a child of route and not route[method]
-      debug("[route.parameters] %o", route.parameters)
       obj.parameters = route.parameters ? route.parameters.concat(obj.parameters) : obj.parameters
+      debug("[obj.parameters] %o", obj.parameters)
       //
       
       if (obj.parameters) {
@@ -109,6 +109,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       } else {
         parameterDetails = [];
       }
+            
 
       const endpoint: Endpoint = {
         parameters: parameterDetails,
