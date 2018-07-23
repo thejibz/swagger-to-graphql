@@ -62,10 +62,10 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
           url: customHeaders['x-oauth-v1-request-url'],
           method: customHeaders['x-oauth-v1-request-method']
         };
-        
+        console.log("[swagger-to-graphql][customHeaders] " + JSON.stringify(customHeaders, null, 2));
         // remove OAuth secret from headers
         customHeaders = Array.isArray(customHeaders) ? customHeaders.filter(h => h !== 'x-oauth-v1-consumer-secret') : [];
-        
+        console.log("[swagger-to-graphql][customHeaders] " + JSON.stringify(customHeaders, null, 2));
         req.url += "?q=lyon&result_type=popular"; // [WIP]
         
         // add OAuth headers       
