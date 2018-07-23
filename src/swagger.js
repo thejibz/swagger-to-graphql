@@ -98,14 +98,17 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       const isMutation = ['post', 'put', 'patch', 'delete'].indexOf(method) !== -1;
       const typeName = getGQLTypeNameFromURL(method, path);
       let parameterDetails;
+      
+      // [FIX] for when parameters is a child of route and not route[method]
+      obj.parameters = obj.parameters ? obj.parameters : route.parameters
+      //
+      
       if (obj.parameters) {
         parameterDetails = obj.parameters.map(param => getParamDetails(param, schema, refs));
-      } else if (route.parameters) { // [FIX] for when parameters is a child of route and not route[method]
-        parameterDetails = route.parameters.map(param => getParamDetails(param, schema, refs));
       } else {
         parameterDetails = [];
       }
-      debug("[parameterDetails] %O", parameterDetails)
+
       const endpoint: Endpoint = {
         parameters: parameterDetails,
         description: obj.description,
@@ -117,7 +120,6 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
           }
           const url = `${baseUrl}${path}`;
           const request = renameGraphqlParametersToSwaggerParameters(graphqlParameters, parameterDetails);
-          debug("[obj] %O", obj)
           const reqOpts = getRequestOptions(obj, {
             request,
             url,
