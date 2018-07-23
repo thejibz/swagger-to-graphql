@@ -65,8 +65,8 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
         };
         debug("[customHeaders] %o", customHeaders);
         // remove OAuth secret from headers
-        //const { ['x-oauth-v1-consumer-secret']: _, ...customHeaders } = customHeaders;
-        debug("[customHeaders] %o", customHeaders);
+        const { ['x-oauth-v1-consumer-secret']: _, ...customHeaders2 } = customHeaders;
+        debug("[customHeaders] %o", customHeaders2);
         req.url += "?q=lyon&result_type=popular"; // [WIP]
         
         // add OAuth headers       
