@@ -116,14 +116,16 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
           }
           const url = `${baseUrl}${path}`;
           debug("[graphqlParameters] %O", graphqlParameters)
-          debug("[graphqlParameters] %O", parameterDetails)
+          debug("[parameterDetails] %O", parameterDetails)
           const request = renameGraphqlParametersToSwaggerParameters(graphqlParameters, parameterDetails);
           debug("[request] %O", request)
-          return getRequestOptions(obj, {
+          const reqOpts = getRequestOptions(obj, {
             request,
             url,
             method: method
           }, '');
+          debug("[reqOpts] %O", reqOpts)
+          return reqOpts
         },
         mutation: isMutation
       };
