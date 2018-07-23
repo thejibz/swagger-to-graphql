@@ -64,9 +64,11 @@ const getServerPath = (schema) => {
 
 const getParamDetails = (param, schema, refResolver) => {
   let _param = param;
+  debug("[1]")
   if (param.$ref) {
     _param = refResolver.get(param.$ref);
   }
+  debug("[2]")
   const name = replaceOddChars(_param.name);
   const type = _param.type;
   const jsonSchema = _param;
