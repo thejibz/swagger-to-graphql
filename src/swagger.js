@@ -1,4 +1,5 @@
 // @flow
+const debug = require('debug')('swagger-to-graphql')
 import type {SwaggerSchema, Endpoint, Responses, RefType} from './types';
 import refParser from 'json-schema-ref-parser';
 import type {GraphQLParameters} from './types';
@@ -99,7 +100,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       let parameterDetails;
       if (obj.parameters) {
         parameterDetails = obj.parameters.map(param => getParamDetails(param, schema, refs));
-      } else if (route.parameters) { // Fix for when parameters is a child of route and not route[method]
+      } else if (route.parameters) { // [FIX] for when parameters is a child of route and not route[method]
         parameterDetails = route.parameters.map(param => getParamDetails(param, schema, refs));
       } else {
         parameterDetails = [];
@@ -114,7 +115,10 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
             throw new Error('Could not get the base url for endpoints. Check that either your schema has baseUrl or you provided it to constructor');
           }
           const url = `${baseUrl}${path}`;
+          debug("[graphqlParameters] %O", graphqlParameters)
+          debug("[graphqlParameters] %O", parameterDetails)
           const request = renameGraphqlParametersToSwaggerParameters(graphqlParameters, parameterDetails);
+          debug("[request] %O", request)
           return getRequestOptions(obj, {
             request,
             url,
