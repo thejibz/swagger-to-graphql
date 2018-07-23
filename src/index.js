@@ -68,7 +68,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
         const { ['x-oauth-v1-consumer-secret']: _, ...redactedCustomHeaders } = customHeaders;
         customHeaders = redactedCustomHeaders;
         
-        req.url += "?q=lyon&result_type=popular"; // [WIP]
+        //req.url += "?q=lyon&result_type=popular"; // [WIP]
         
         // add OAuth headers       
         req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_infos)), req.headers);
