@@ -48,7 +48,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     
     if (customHeaders) { // [FIX] to take into account customHeaders
       if (customHeaders['x-oauth-v1-consumer-key']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
-debug("[customHeaders] %s", customHeaders['x-oauth-v1-consumer-key']);
+
         const oauth = OAuth({
           consumer: {
             key: customHeaders['x-oauth-v1-consumer-key'],
@@ -63,20 +63,20 @@ debug("[customHeaders] %s", customHeaders['x-oauth-v1-consumer-key']);
           url: customHeaders['x-oauth-v1-request-url'],
           method: customHeaders['x-oauth-v1-request-method']
         };
-        debug("[customHeaders] %o",JSON.stringify(customHeaders, null, 2));
+        debug("[customHeaders] %o", customHeaders);
         // remove OAuth secret from headers
-        customHeaders = Array.isArray(customHeaders) ? customHeaders.filter(h => h !== 'x-oauth-v1-consumer-secret') : [];
-        debug("[customHeaders] %o", JSON.stringify(customHeaders, null, 2));
+        { 'x-oauth-v1-consumer-secret', ...customHeaders } = customHeaders;
+        debug("[customHeaders] %o", customHeaders);
         req.url += "?q=lyon&result_type=popular"; // [WIP]
         
         // add OAuth headers       
         req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_infos)), req.headers);
       }
-      // add customHeaders
+      // add customHeaders to the request to backend
       req.headers = Object.assign(customHeaders, req.headers);  
     }
     
-    console.log("[swagger-to-graphql][req] " + JSON.stringify(req, null, 2));
+    debug("[req] %O", req);
     const res = await rp(req);
     return JSON.parse(res);
   };
