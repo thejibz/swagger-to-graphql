@@ -38,6 +38,7 @@ const schemaFromEndpoints = (endpoints: Endpoints, proxyUrl, headers) => {
 
 const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHeaders = {}) =>
   async (_, args: GraphQLParameters, opts: SwaggerToGraphQLOptions) => {
+    debug("[args] %O", args)
     const proxy = !proxyUrl ? opts.GQLProxyBaseUrl : (typeof proxyUrl === 'function' ? proxyUrl(opts) : proxyUrl);
     const req = endpoint.request(args, proxy);
     
