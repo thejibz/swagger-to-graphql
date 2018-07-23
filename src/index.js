@@ -38,7 +38,7 @@ const schemaFromEndpoints = (endpoints: Endpoints, proxyUrl, headers) => {
 
 const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHeaders = {}) =>
   async (_, args: GraphQLParameters, opts: SwaggerToGraphQLOptions) => {
-    debug("[args] %O", args)
+    
     const proxy = !proxyUrl ? opts.GQLProxyBaseUrl : (typeof proxyUrl === 'function' ? proxyUrl(opts) : proxyUrl);
     const req = endpoint.request(args, proxy);
     
@@ -61,16 +61,14 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
           }
         });
         const request_infos = {
-          url: customHeaders['x-oauth-v1-request-url'],
-          method: customHeaders['x-oauth-v1-request-method']
+          url: req.url,
+          method: req.method
         };
 
         // remove OAuth secret from custom headers
         const { ['x-oauth-v1-consumer-secret']: _, ...redactedCustomHeaders } = customHeaders;
         customHeaders = redactedCustomHeaders;
-        
-        //req.url += "?q=lyon&result_type=popular"; // [WIP]
-        
+               
         // add OAuth headers       
         req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_infos)), req.headers);
       }
