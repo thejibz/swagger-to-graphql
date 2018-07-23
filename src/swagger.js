@@ -101,6 +101,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       
       // [FIX] for when parameters is a child of route and not route[method]
       obj.parameters = obj.parameters ? obj.parameters : route.parameters
+      delete route.parameters
       //
       
       if (obj.parameters) {
