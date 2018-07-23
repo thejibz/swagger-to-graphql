@@ -4,6 +4,7 @@ import rp from 'request-promise';
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { getAllEndPoints, loadSchema, loadRefs } from './swagger';
 import { createGQLObject, mapParametersToFields } from './typeMap';
+const debug = require('debug')('swagger-to-graphql')
 const OAuth   = require('oauth-1.0a')
 const crypto  = require('crypto');
 
@@ -47,7 +48,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     
     if (customHeaders) { // [FIX] to take into account customHeaders
       if (customHeaders['x-oauth-v1-consumer-key']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
-console.log("[swagger-to-graphql][customHeaders] " + customHeaders['x-oauth-v1-consumer-key']);
+debug("[customHeaders] %s", customHeaders['x-oauth-v1-consumer-key']);
         const oauth = OAuth({
           consumer: {
             key: customHeaders['x-oauth-v1-consumer-key'],
@@ -62,10 +63,10 @@ console.log("[swagger-to-graphql][customHeaders] " + customHeaders['x-oauth-v1-c
           url: customHeaders['x-oauth-v1-request-url'],
           method: customHeaders['x-oauth-v1-request-method']
         };
-        console.log("[swagger-to-graphql][customHeaders] " + JSON.stringify(customHeaders, null, 2));
+        debug("[customHeaders] %o",JSON.stringify(customHeaders, null, 2));
         // remove OAuth secret from headers
         customHeaders = Array.isArray(customHeaders) ? customHeaders.filter(h => h !== 'x-oauth-v1-consumer-secret') : [];
-        console.log("[swagger-to-graphql][customHeaders] " + JSON.stringify(customHeaders, null, 2));
+        debug("[customHeaders] %o", JSON.stringify(customHeaders, null, 2));
         req.url += "?q=lyon&result_type=popular"; // [WIP]
         
         // add OAuth headers       
