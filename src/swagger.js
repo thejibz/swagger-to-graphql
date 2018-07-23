@@ -64,11 +64,9 @@ const getServerPath = (schema) => {
 
 const getParamDetails = (param, schema, refResolver) => {
   let _param = param;
-  debug("[1] %o", param)
   if (param.$ref) {
     _param = refResolver.get(param.$ref);
   }
-  debug("[2] %o", param)
   const name = replaceOddChars(_param.name);
   const type = _param.type;
   const jsonSchema = _param;
@@ -102,8 +100,13 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       let parameterDetails;
       
       // [FIX] for when parameters is a child of route and not route[method]
-      obj.parameters = route.parameters ? route.parameters.concat(obj.parameters) : obj.parameters
-      debug("[obj.parameters] %o", obj.parameters)
+      if (route.parameters) {
+        if (obj.parameters) {
+          obj.parameters = route.parameters.concat(obj.parameters)
+        } else {
+          obj.parameters = route.parameters
+        }
+      }
       //
       
       if (obj.parameters) {
