@@ -1,6 +1,4 @@
 // @flow
-process.env.DEBUG = 'node-request-by-swagger'
-
 import type {GraphQLParameters, Endpoint, GraphQLType, RootGraphQLSchema, SwaggerToGraphQLOptions, GraphQLTypeMap} from './types';
 import rp from 'request-promise';
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
