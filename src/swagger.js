@@ -27,7 +27,8 @@ const getSuccessResponse = (responses: Responses) => {
     resp = responses[code];
     return code[0] === '2';
   });
-  debug("resp.schema %O", resp.schema)
+  debug("resolved resp.schema %O", refParser.resolve(resp.schema))
+  debug("resolved resp.schema %O", refParser.deference(resp.schema))
   return resp && resp.schema;
 };
 
