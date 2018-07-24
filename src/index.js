@@ -61,13 +61,13 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
             return crypto.createHmac('sha1', key).update(base_string).digest('base64');
           }
         });
-        
+        debug("req.url %s", req.url + "?" + querystring.stringify(req.qs))
         const request_infos = {
-          url: req.url + "?" + querystring.parse(req.qs),
+          url: req.url + "?" + querystring.stringify(req.qs),
           method: req.method
         };
         //
-        debug("req.url %s", req.url + "?" + querystring.parse(req.qs))
+        
         // remove OAuth params from custom headers
         const { 
           ['x-oauth-v1-consumer-secret']: _0, 
