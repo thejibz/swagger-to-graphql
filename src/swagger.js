@@ -27,7 +27,7 @@ const getSuccessResponse = (responses: Responses) => {
     resp = responses[code];
     return code[0] === '2';
   });
-  
+  debug("resp.schema %O", resp.schema)
   return resp && resp.schema;
 };
 
@@ -39,7 +39,7 @@ export const loadSchema = async (pathToSchema: string) => {
 export const loadRefs = async (pathToSchema: string) => {
   // [FIX] deference $ref instead of just resolve them 
   // (then the lib can correctly rename them)
-  return await refParser.dereference(pathToSchema);
+  return await refParser.resolve(pathToSchema);
 };
 
 const replaceOddChars = (str) => str.replace(/[^_a-zA-Z0-9]/g, '_');
@@ -72,7 +72,7 @@ const getParamDetails = (param, schema, refResolver) => {
   const name = replaceOddChars(_param.name);
   const type = _param.type;
   const jsonSchema = _param;
-
+  
   return {name, type, jsonSchema};
 };
 
