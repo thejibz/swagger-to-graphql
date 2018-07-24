@@ -18,7 +18,7 @@ const getGQLTypeNameFromURL = (method: string, url: string) => {
   return `${method}${fromUrl}`;
 };
 
-const async getSuccessResponse = (responses: Responses) => {
+const getSuccessResponse = (responses: Responses) => {
   let resp;
 
   if (!responses) return null;
