@@ -29,9 +29,9 @@ const getSuccessResponse = (responses: Responses) => {
   });
   // [FIX] deference $ref instead of just resolve them 
   // (then the lib can correctly rename them)
-  let resolved = await refParser.resolve(resp.schema)
+  const  resolved = await refParser.resolve(resp.schema)
   debug("resolved resp.schema %O", resolved)
-  let deferenced = await refParser.deference(resp.schema)
+  const  deferenced = await refParser.deference(resp.schema)
   debug("resolved resp.schema %O", deferenced)
   return resp && resp.schema;
 };
