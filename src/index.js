@@ -61,6 +61,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
             return crypto.createHmac('sha1', key).update(base_string).digest('base64');
           }
         });
+        debug("req.url %o", req.url)
         const request_infos = {
           url: req.url + "?" + querystring.parse(req.qs),
           method: req.method
