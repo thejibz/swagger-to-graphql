@@ -69,9 +69,9 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
         
         // remove OAuth params from custom headers
         const { 
-          ['x-oauth-v1-consumer-secret']: _, 
-          ['x-oauth-v1-consumer-key']: _, 
-          ['x-oauth-v1-signature-method']: _,
+          ['x-oauth-v1-consumer-secret']: _0, 
+          ['x-oauth-v1-consumer-key']: _1, 
+          ['x-oauth-v1-signature-method']: _2,
           ...redactedCustomHeaders } = customHeaders;
         customHeaders = redactedCustomHeaders;
         //
