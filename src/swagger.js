@@ -27,7 +27,7 @@ const getSuccessResponse = (responses: Responses) => {
     resp = responses[code];
     return code[0] === '2';
   });
-  debug([resp.schema] %O", resp.schema)
+  debug("[resp.schema] %O", resp.schema)
   return resp && resp.schema;
 };
 
