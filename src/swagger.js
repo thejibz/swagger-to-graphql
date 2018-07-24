@@ -18,7 +18,7 @@ const getGQLTypeNameFromURL = (method: string, url: string) => {
   return `${method}${fromUrl}`;
 };
 
-const getSuccessResponse = (responses: Responses) => {
+const async getSuccessResponse = (responses: Responses) => {
   let resp;
 
   if (!responses) return null;
@@ -124,7 +124,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       const endpoint: Endpoint = {
         parameters: parameterDetails,
         description: obj.description,
-        response: getSuccessResponse(obj.responses),
+        response: await getSuccessResponse(obj.responses),
         request: (graphqlParameters: GraphQLParameters, optBaseUrl: string) => {
           const baseUrl = optBaseUrl || serverPath;  // eslint-disable-line no-param-reassign
           if (!baseUrl) {
