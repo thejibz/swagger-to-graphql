@@ -32,7 +32,9 @@ const getSuccessResponse = (responses: Responses) => {
 };
 
 export const loadSchema = async (pathToSchema: string) => {
-  __schema = await refParser.bundle(pathToSchema);
+  // [FIX] deference $ref instead of bundle them
+  // (then the lib can correctly rename them)
+  __schema = await refParser.deference(pathToSchema);
   return __schema;
 };
 
