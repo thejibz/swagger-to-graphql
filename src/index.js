@@ -62,7 +62,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
           }
         });
         const request_infos = {
-          url: querystring.parse(req.url + "?" + req.qs),
+          url: req.url + "?" + querystring.parse(req.qs),
           method: req.method
         };
         //
