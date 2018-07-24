@@ -29,9 +29,9 @@ const async getSuccessResponse = (responses: Responses) => {
   });
   // [FIX] deference $ref instead of just resolve them 
   // (then the lib can correctly rename them)
-  const  resolved = await refParser.resolve(resp.schema)
+  const resolved = async () => await refParser.resolve(resp.schema)
   debug("resolved resp.schema %O", resolved)
-  const  deferenced = await refParser.deference(resp.schema)
+  const deferenced =  async () => await refParser.deference(resp.schema)
   debug("resolved resp.schema %O", deferenced)
   return resp && resp.schema;
 };
@@ -124,7 +124,7 @@ export const getAllEndPoints = (schema: SwaggerSchema, refs: RefType): {[string]
       const endpoint: Endpoint = {
         parameters: parameterDetails,
         description: obj.description,
-        response: await getSuccessResponse(obj.responses),
+        response: getSuccessResponse(obj.responses),
         request: (graphqlParameters: GraphQLParameters, optBaseUrl: string) => {
           const baseUrl = optBaseUrl || serverPath;  // eslint-disable-line no-param-reassign
           if (!baseUrl) {
