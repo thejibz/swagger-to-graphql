@@ -5,8 +5,9 @@ import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { getAllEndPoints, loadSchema, loadRefs } from './swagger';
 import { createGQLObject, mapParametersToFields } from './typeMap';
 const debug = require('debug')('swagger-to-graphql')
-const OAuth   = require('oauth-1.0a')
+const OAuth   = require('oauth-1.0a');
 const crypto  = require('crypto');
+const querystring = require('querystring');
 
 type Endpoints = {[string]: Endpoint};
 
@@ -49,7 +50,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     
     if (customHeaders) { // [FIX] to take into account customHeaders
       if (customHeaders['x-oauth-v1-consumer-key']) { // [FEATURE] Handle OAuth v1 with https://www.npmjs.com/package/oauth-1.0a
-
+        // construct the oauth object
         const oauth = OAuth({
           consumer: {
             key: customHeaders['x-oauth-v1-consumer-key'],
@@ -61,18 +62,24 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
           }
         });
         const request_infos = {
-          url: req.url,
+          url: querystring.parse(req.url + "?" + req.qs),
           method: req.method
         };
-
-        // remove OAuth secret from custom headers
-        const { ['x-oauth-v1-consumer-secret']: _, ...redactedCustomHeaders } = customHeaders;
+        //
+        
+        // remove OAuth params from custom headers
+        const { 
+          ['x-oauth-v1-consumer-secret']: _, 
+          ['x-oauth-v1-consumer-key']: _, 
+          ['x-oauth-v1-signature-method']: _,
+          ...redactedCustomHeaders } = customHeaders;
         customHeaders = redactedCustomHeaders;
-               
-        // add OAuth headers       
+        //
+        
+        // add OAuth headers to the backend's request     
         req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_infos)), req.headers);
       }
-      // add customHeaders to the request to backend
+      // add customHeaders to the backend's request
       req.headers = Object.assign(customHeaders, req.headers);  
     }
     
