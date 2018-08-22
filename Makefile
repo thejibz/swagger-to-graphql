@@ -3,5 +3,5 @@
 install:
 	rm -rf .git 
 	rm -f .gitignore 
-	npm install
-	npm run build
+	yarn install
+	yarn run build
