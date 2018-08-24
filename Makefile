@@ -9,5 +9,5 @@ push:
 	git status
 	git add .
 	git status
-	git commit -m"[sync]"
+	git commit -m"[sync]" || true 
 	git push
