@@ -6,8 +6,13 @@ install:
 	yarn run build
 
 push:
-	git status
 	git add .
 	git status
-	git commit -m"[sync]" || true 
+	git commit -m"[sync]" 
 	git push
+
+force_push:
+	git add .
+	git status
+	git commit -m"[sync]"|| true  
+	git push -f
