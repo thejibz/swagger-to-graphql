@@ -1,8 +1,9 @@
 .PHONY : install push force_push
 
 install:
-	yarn add babel babel-cli
+	yarn add --dev babel babel-cli
 	yarn run build
+	rm -rf node_modules
 
 push:
 	git add .
