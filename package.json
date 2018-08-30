@@ -52,8 +52,9 @@
   "scripts": {
     "build": "babel src -d lib",
     "lint": "eslint src/",
-    "prepare": "npm run build",
+    "prepare": "yarn run build",
     "start": "node example/app.js",
-    "test": "mocha"
+    "test": "mocha",
+    "postinstall": "yarn run build &&	rm -rf node_modules"
   }
 }
