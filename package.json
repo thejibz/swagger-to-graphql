@@ -54,7 +54,6 @@
     "build": "babel src -d lib",
     "lint": "eslint src/",
     "start": "node example/app.js",
-    "test": "mocha",
-    "postinstall": "yarn add babel babel-cli && yarn run build && rm -rf node_modules"
+    "test": "mocha"
   }
 }
