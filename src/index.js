@@ -77,11 +77,22 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
         customHeaders = redactedCustomHeaders;
         //
         
-        // add OAuth headers to the backend's request     
-        req.headers = Object.assign(oauth.toHeader(oauth.authorize(request_infos)), req.headers);
+        // compute OAuth headers for the backend's request     
+        customHeaders = Object.assign(customHeaders, oauth.toHeader(oauth.authorize(request_infos)))
       }
+
+      if (customHeaders['x-proxy']) {
+        req.proxy = customHeaders['x-proxy']
+        // remove x-proxy from custom headers
+        const { 
+          ['x-proxy']: _0,
+          ...redactedCustomHeaders } = customHeaders;
+        customHeaders = redactedCustomHeaders;
+        //
+      }
+
       // add customHeaders to the backend's request
-      req.headers = Object.assign(customHeaders, req.headers);  
+      req.headers = Object.assign(req.headers, customHeaders);  
     }
     
     debug("[req] %O", req);
