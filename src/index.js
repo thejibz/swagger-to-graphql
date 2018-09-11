@@ -47,9 +47,9 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
       const { host, ...otherHeaders } = opts.headers;
       req.headers = Object.assign(req.headers, otherHeaders);
     }
-    
+    debug("custom headers %O", customHeaders)
     if (customHeaders) {
-      debug("custom headers %O", customHeaders)
+      
       if (customHeaders['x-oauth-v1-consumer-key']) {
         // construct the oauth object
         const oauth = OAuth({
