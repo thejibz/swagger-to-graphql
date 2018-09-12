@@ -97,6 +97,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     }
     
     debug("(req) %O", req);
+    req.headers['accept-encoding'] = 'entity'
     const res = await rp(req);
     debug("(res) %O", res)
     return JSON.parse(res);
