@@ -96,8 +96,9 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
       req.headers = Object.assign(req.headers, customHeaders);  
     }
     
-    debug("[req] %O", req);
+    debug("(req) %O", req);
     const res = await rp(req);
+    debug("(res) %O", res)
     return JSON.parse(res);
   };
 
