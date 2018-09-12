@@ -101,7 +101,8 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     debug("(req) %O", req);
     
     const jsonRes = await rp(req);
-  
+    debug("(res) %O", res);
+
     return jsonRes;
   };
 
