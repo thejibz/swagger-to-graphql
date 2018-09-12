@@ -49,7 +49,7 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     }
     
     if (customHeaders) {
-      debug("custom headers %O", customHeaders)
+      debug("(customHeaders) %O", customHeaders)
       if (customHeaders['x-oauth-v1-consumer-key']) {
         // construct the oauth object
         const oauth = OAuth({
@@ -97,10 +97,11 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
     }
     
     debug("(req) %O", req);
-    req.headers['accept-encoding'] = 'entity'
+    //req.headers['accept-encoding'] = 'entity'
     const res = await rp(req);
-    debug("(res) %O", res)
-    return JSON.parse(res);
+    jsonRes = res.then(jsonRes => { debug("(res) %O", jsonRes) })
+    
+    return JSON.parse(jsonRes);
   };
 
 const getFields = (endpoints, isMutation, gqlTypes, proxyUrl, headers): GraphQLTypeMap => {
