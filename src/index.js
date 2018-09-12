@@ -96,12 +96,13 @@ const resolver = (endpoint: Endpoint, proxyUrl: ?(Function | string), customHead
       req.headers = Object.assign(req.headers, customHeaders);  
     }
     
-    debug("(req) %O", req);
     //req.headers['accept-encoding'] = 'entity'
-    const res = await rp(req);
-    jsonRes = res.then(jsonRes => { debug("(res) %O", jsonRes) })
+    req.json = true
+    debug("(req) %O", req);
     
-    return JSON.parse(jsonRes);
+    const jsonRes = await rp(req);
+  
+    return jsonRes;
   };
 
 const getFields = (endpoints, isMutation, gqlTypes, proxyUrl, headers): GraphQLTypeMap => {
