@@ -4,7 +4,7 @@
 .idea/
 .vscode/
 
-lib/
+
 package-lock.json
 bin/
 
